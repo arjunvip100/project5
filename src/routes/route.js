@@ -10,6 +10,9 @@ const auth=require("../middleware/auth.js")
 
 router.post("/register",userController.createUser)
 router.post("/login",userController.login)
+router.get("/user/:userId/profile", auth.userAuth, userController.getUserById);
+
+
 
 
 //----------------if api is invalid OR wrong URL-------------------------

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken")
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const aws = require("../aws/aws.js")
+const validator=require("../validator/validator")
 
 ////////////                Validation              ////////////
 const isValid = function (value) {
@@ -252,6 +253,35 @@ const login = async function (req, res) {
 }
 }
 
+//////////                  GetUserbyId                   ///////////
+
+const getUserById = async (req, res) => {
+    try {
+      const userIdParams = req.params.userId.trim();
+  
+      if (!validator.isValidObjectId(userIdParams)) {
+        return res
+          .status(400)
+          .send({ status: false, message: "INVALID User ID in Params." });
+      }
+  
+      const findUser = await userModel.findById(userIdParams);
+  
+      if (!findUser) {
+        return res
+          .status(404)
+          .send({ status: false, message: "User NOT Found." });
+      }
+  
+      return res.status(200).send({
+        status: true,
+        message: "User profile details.",
+        data: findUser,
+      });
+    } catch (error) {
+      return res.status(500).send({ status: false, message: error.message });
+    }
+  };
 
 
 
@@ -284,6 +314,4 @@ const login = async function (req, res) {
 
 
 
-
-
-module.exports = {createUser,login};
+module.exports = {createUser,login,getUserById};

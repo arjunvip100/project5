@@ -1,25 +1,34 @@
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
-const userModel = require("../models/userModel");
 
-// Authentication.
-const authentication = async function (req, res, next) {
+const userAuth = async (req, res, next) => {
   try {
-    console.log("Authentication.");
+    const token = req.header('Authorization', 'Bearer ')
+
+    if (!token) {
+      return res.status(403).send({
+          status: false,
+          message: `Missing authentication token in request`,
+        });
+    }
+
+    let splitToken = token.split(' ')
+
+    const decodeToken = jwt.verify(splitToken[1], "Secret-Key")
+    
+    if (!decodeToken) {
+      return res.status(403).send({
+          status: false,
+          message: `Invalid authentication token in request`,
+        });
+    }
+
+    req.userId = decodeToken.userId
+
     next();
-  } catch (error) {
-    return res.status(500).send({ status: false, message: error.message });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: err.message });
   }
 };
 
-//Authorization.
-const authorization = async function (req, res, next) {
-  try {
-    console.log("Authorization.");
-    next();
-  } catch (error) {
-    return res.status(500).send({ status: false, message: error.message });
-  }
-};
-
-module.exports = { authentication, authorization };
+module.exports.userAuth = userAuth;
