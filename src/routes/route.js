@@ -9,6 +9,9 @@ const auth=require("../middleware/auth.js")
 
 
 router.post("/register",userController.createUser)
+router.post("/login",userController.login)
+
+
 //----------------if api is invalid OR wrong URL-------------------------
 router.all("/**", function (req, res) {
   res
