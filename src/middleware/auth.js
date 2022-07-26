@@ -12,9 +12,7 @@ const userAuth = async (req, res, next) => {
     }
 
     let splitToken = token.split(' ')
-
-    const decodeToken = jwt.verify(splitToken[1], "Secret-Key")
-    
+    const decodeToken = jwt.verify(splitToken[1], "Secret-Key")  
     if (!decodeToken) {
       return res.status(403).send({
           status: false,
