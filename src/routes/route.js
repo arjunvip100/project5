@@ -11,9 +11,9 @@ const auth=require("../middleware/auth.js")
 router.post("/register",userController.createUser)
 router.post("/login",userController.login)
 router.get("/user/:userId/profile", auth.userAuth, userController.getUserById);
+router.put("/user/:userId/profile",auth.userAuth,userController.UpdateUser)
 
-
-
+router.post("/products",productController.createProducts)
 
 //----------------if api is invalid OR wrong URL-------------------------
 router.all("/**", function (req, res) {
