@@ -21,6 +21,13 @@ router.get("/products", productController.getProductByFilter);
 router.put("/products/:productId", productController.updateProductById);
 router.delete("/products/:productId", productController.deleteProductById);
 
+// Feature III - Cart
+
+router.post("/users/:userId/cart", auth.userAuth, cartController.addToCart)
+router.put("/users/:userId/cart", auth.userAuth, cartController.getUsersCart)
+router.get("/users/:userId/cart", auth.userAuth, cartController.updateCart)
+router.delete("/users/:userId/cart", auth.userAuth, cartController.deleteUsersCart)
+
 //----------------if api is invalid OR wrong URL-------------------------
 router.all("/**", function (req, res) {
   res
